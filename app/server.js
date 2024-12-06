@@ -7,6 +7,11 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+// Test route
+app.get('/test', (req, res) => {
+    res.json({ message: 'Hello world' });
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
