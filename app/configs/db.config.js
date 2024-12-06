@@ -1,9 +1,12 @@
 require('dotenv').config();
-module.exports = {
-    HOST: process.env.DB_HOST,
-    USER: process.env.DB_USER,
-    PASSWORD: process.env.DB_PASS,
-    DB: process.env.DB_NAME,
-    PORT: process.env.DB_PORT,
-    dialect: "mysql",
+const mongoose = require('mongoose');
+
+const dbConfig = {
+    uri: process.env.DB_URI,
 };
+
+mongoose.connect(dbConfig.uri)
+    .then(() => console.log('Kết nối MongoDB thành công!'))
+    .catch(err => console.error('Lỗi kết nối MongoDB:', err));
+
+module.exports = mongoose;

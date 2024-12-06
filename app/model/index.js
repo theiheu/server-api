@@ -1,24 +1,32 @@
-const { Sequelize } = require('sequelize')
-const { DB, HOST, PASSWORD, USER, PORT, dialect } = require('../configs/db.config')
-const { createProductsModel } = require('../model/products.model')
+const mongoose = require('mongoose');
+require('dotenv').config();
 
-const sequelize = new Sequelize(DB, USER, PASSWORD, {
-    host: HOST,
-    port: PORT,
-    dialect: dialect,
-});
 const checkConnect = async () => {
     try {
-        await sequelize.authenticate();
-        console.log('Ket noi thanh cong')
+        await mongoose.connect(process.env.DB_URI);
+        console.log('Kết nối thành công');
     } catch (error) {
-        console.log("Ket noi khong thanh cong: ", error);
-
+        console.log("Kết nối không thành công: ", error);
     }
-}
-checkConnect()
-const Products = createProductsModel(sequelize)
+};
+
+checkConnect();
+
+// Định nghĩa mô hình sản phẩm
+const createProductsModel = (mongoose) => {
+    const productSchema = new mongoose.Schema({
+        name: String,
+        price: Number,
+        description: String,
+        // Thêm các trường khác nếu cần
+    });
+
+    return mongoose.model('Product', productSchema);
+};
+
+const Products = createProductsModel(mongoose);
+
 module.exports = {
-    sequelize,
+    mongoose,
     Products,
-}
+};
